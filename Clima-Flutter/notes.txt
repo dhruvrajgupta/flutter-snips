@@ -1,0 +1,4 @@
+1. Use geolocator to get position
+2. use async and await and Futures<Type>
+3. Lifecycle
+4. EXception handling
