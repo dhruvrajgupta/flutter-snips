@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 const List<String> currenciesList = [
   'AUD',
@@ -30,4 +30,19 @@ const List<String> cryptoList = [
   'LTC',
 ];
 
-class CoinData {}
+class CoinData {
+  static String targetCurrency = "USD";
+  String baseUrl = "http://api.coinlayer.com/live";
+  String apiKey = "API Key";
+
+  Future getCryptoData() async {
+    http.Response response =
+        await http.get("$baseUrl?access_key=$apiKey&target=$targetCurrency");
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      print("Error: There was some error in fetching data");
+      throw 'Problem fetching data';
+    }
+  }
+}
