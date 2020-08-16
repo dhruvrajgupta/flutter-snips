@@ -31,11 +31,10 @@ const List<String> cryptoList = [
 ];
 
 class CoinData {
-  static String targetCurrency = "USD";
   String baseUrl = "http://api.coinlayer.com/live";
   String apiKey = "API Key";
 
-  Future getCryptoData() async {
+  Future getCryptoData(String targetCurrency) async {
     http.Response response =
         await http.get("$baseUrl?access_key=$apiKey&target=$targetCurrency");
     if (response.statusCode == 200) {

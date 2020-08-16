@@ -20,12 +20,12 @@ class _PriceScreenState extends State<PriceScreen> {
   @override
   void initState() {
     super.initState();
-    getCryptoData();
+    getCryptoData(selectedCurrency);
   }
 
-  void getCryptoData() async {
+  void getCryptoData(String targetCurrency) async {
     try {
-      cryptoData = await CoinData().getCryptoData();
+      cryptoData = await CoinData().getCryptoData(targetCurrency);
     } catch (e) {
       print(e);
     }
@@ -38,6 +38,7 @@ class _PriceScreenState extends State<PriceScreen> {
   void updateUI() {
     setState(() {
       btcPrice = jsonDecode(cryptoData)["rates"]["BTC"].toStringAsFixed(2);
+      selectedCurrency = jsonDecode(cryptoData)["target"];
     });
   }
 
@@ -62,7 +63,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = $btcPrice USD',
+                  '1 BTC = $btcPrice $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -91,11 +92,12 @@ class _PriceScreenState extends State<PriceScreen> {
     }
 
     return CupertinoPicker(
+      scrollController: FixedExtentScrollController(initialItem: 19),
       backgroundColor: Colors.lightBlue,
       itemExtent: 32.0,
       children: pickerValues,
       onSelectedItemChanged: (value) {
-        print(value);
+        getCryptoData(currenciesList[value]);
       },
     );
   }
@@ -114,10 +116,10 @@ class _PriceScreenState extends State<PriceScreen> {
       items: dropdownItem,
       onChanged: (value) {
         setState(() {
-          print(value);
-          selectedCurrency = value;
+          getCryptoData(value);
         });
       },
     );
   }
 }
+
